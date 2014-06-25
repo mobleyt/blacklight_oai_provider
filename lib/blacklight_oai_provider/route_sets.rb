@@ -3,7 +3,7 @@ module BlacklightOaiProvider
     protected
     def catalog
       add_routes do |options|
-        get 'catalog/oai' => 'catalog#oai', :as => 'oai_provider'
+        get '/lcdl/catalog/oai' => 'catalog#oai', :as => 'oai_provider'
       end
 
       super
