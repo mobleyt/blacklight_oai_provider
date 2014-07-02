@@ -12,7 +12,8 @@ module BlacklightOaiProvider::ControllerExtension
   # first found min/max from result set. 
   def oai
     options = params.delete_if { |k,v| %w{controller action}.include?(k) }
-render :text => oai_provider.process_request(options) end
+    render :text => oai_provider.process_request(options), :content_type => 'text/xml' 
+ end
 
   # Uses Blacklight.config, needs to be modified when
   # that changes to be controller-based. This is the only method
