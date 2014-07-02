@@ -4,7 +4,7 @@ module BlacklightOaiProvider::SolrDocumentExtension
   def timestamp
     Time.parse get('timestamp')
   end
-  def to_qdc
+  def to_oai_dc
     export_as('qdc_xml')
   end
 end
