@@ -7,4 +7,8 @@ module BlacklightOaiProvider::SolrDocumentExtension
   def to_oai_dc
     export_as('oai_dc_xml')
   end
+  
+  def to_qdc
+    export_as('qdc_xml')
+  end
 end
