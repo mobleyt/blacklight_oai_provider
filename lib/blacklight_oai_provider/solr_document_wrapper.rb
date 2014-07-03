@@ -15,10 +15,6 @@ module BlacklightOaiProvider
     def sets
     end
     
-    def available_formats
-    ["oai_dc","qdc"]
-    end
-    
     def earliest
       Time.parse @controller.get_search_results(@controller.params, {:fl => @timestamp_field, :sort => @timestamp_field +' asc', :rows => 1}).last.first.get(@timestamp_field)
     end
