@@ -23,7 +23,7 @@ module BlacklightOaiProvider
       Time.parse @controller.get_search_results(@controller.params, {:fl => @timestamp_field, :sort => @timestamp_field +' desc', :rows => 1}).last.first.get(@timestamp_field)
     end
 
-    def find(selector, options={:metadata_prefix => "qdc"})
+    def find(selector, options={})
       return next_set(options[:resumption_token]) if options[:resumption_token]
 
       if :all == selector
