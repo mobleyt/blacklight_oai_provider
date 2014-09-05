@@ -22,6 +22,13 @@ module BlacklightOaiProvider
     def latest
       Time.parse @controller.get_search_results(@controller.params, {:qt => 'oai', :fl => @timestamp_field, :sort => @timestamp_field +' desc', :rows => 1}).last.first.get(@timestamp_field)
     end
+    
+    def deleted?(record)
+      if record.has_value?("deleted")
+        return record.deleted
+      end
+      false
+    end
 
     def find(selector, options={})
       return next_set(options[:resumption_token]) if options[:resumption_token]
