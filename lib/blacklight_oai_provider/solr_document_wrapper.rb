@@ -16,11 +16,11 @@ module BlacklightOaiProvider
     end
     
     def earliest
-      Time.parse @controller.get_search_results(@controller.params, {:qt => 'oai', :fl => @timestamp_field, :sort => @timestamp_field +' asc', :rows => 1}).last.first.get(@timestamp_field)
+      Time.parse @controller.get_search_results(@controller.params, {:qt => 'oai', :fq => '-active_fedora_model_ssi:Page -has_model_ssim:info\:fedora\/afmodel\:collection', :fl => @timestamp_field, :sort => @timestamp_field +' asc', :rows => 1}).last.first.get(@timestamp_field)
     end
 
     def latest
-      Time.parse @controller.get_search_results(@controller.params, {:qt => 'oai', :fl => @timestamp_field, :sort => @timestamp_field +' desc', :rows => 1}).last.first.get(@timestamp_field)
+      Time.parse @controller.get_search_results(@controller.params, {:qt => 'oai', :fq => '-active_fedora_model_ssi:Page -has_model_ssim:info\:fedora\/afmodel\:collection', :fl => @timestamp_field, :sort => @timestamp_field +' desc', :rows => 1}).last.first.get(@timestamp_field)
     end
     
     def deleted?(record)
@@ -34,19 +34,19 @@ module BlacklightOaiProvider
       return next_set(options[:resumption_token]) if options[:resumption_token]
 
       if :all == selector
-        response, records = @controller.get_search_results(@controller.params, {:qt => 'oai', :sort => @timestamp_field + ' asc', :rows => @limit})
+        response, records = @controller.get_search_results(@controller.params, {:qt => 'oai', :fq => '-active_fedora_model_ssi:Page -has_model_ssim:info\:fedora\/afmodel\:collection', :sort => @timestamp_field + ' asc', :rows => @limit})
 
         if @limit && response.total >= @limit
           return select_partial(OAI::Provider::ResumptionToken.new(options.merge({:last => 0})))
         end
       else                                                    
-        records = @controller.get_search_results(@controller.params, {:qt => 'oai', :phrase_filters => {:id => selector.split('/', 2).last}}).last.first
+        records = @controller.get_search_results(@controller.params, {:qt => 'oai', :fq => '-active_fedora_model_ssi:Page -has_model_ssim:info\:fedora\/afmodel\:collection', :phrase_filters => {:id => selector.split('/', 2).last}}).last.first
       end
       records
     end
 
     def select_partial token
-      records = @controller.get_search_results(@controller.params, {:qt => 'oai', :sort => @timestamp_field + ' asc', :rows => @limit, :start => token.last}).last
+      records = @controller.get_search_results(@controller.params, {:qt => 'oai', :fq => '-active_fedora_model_ssi:Page -has_model_ssim:info\:fedora\/afmodel\:collection', :sort => @timestamp_field + ' asc', :rows => @limit, :start => token.last}).last
 
       raise ::OAI::ResumptionTokenException.new unless records
 
