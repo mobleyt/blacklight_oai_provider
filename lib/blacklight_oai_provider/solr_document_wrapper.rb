@@ -59,7 +59,7 @@ module BlacklightOaiProvider
       raise ::OAI::ResumptionTokenException.new unless @limit
 
       token = OAI::Provider::ResumptionToken.parse(token_string)
-      select_incomplete_partial(token)
+      select_partial(token)
     end
   end
 end
