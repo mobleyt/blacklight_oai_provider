@@ -31,8 +31,7 @@ module BlacklightOaiProvider
 
         if @limit && response.total >= @limit
           return select_partial(OAI::Provider::ResumptionToken.new(options.merge({:last => 0})))
-        end
-        if @limit && response.total < @limit
+        elsif @limit && response.total < @limit
           return select__incomplete_partial(OAI::Provider::ResumptionToken.new(options.merge({:last => 0})))
         end
       else                                                    
