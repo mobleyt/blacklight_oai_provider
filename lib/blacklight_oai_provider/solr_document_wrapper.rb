@@ -42,11 +42,9 @@ module BlacklightOaiProvider
       records = @controller.get_search_results(@controller.params, {:qt => 'oai', :fq => '-active_fedora_model_ssi:Page -has_model_ssim:info\:fedora\/afmodel\:collection', :sort => @timestamp_field + ' asc', :rows => @limit, :start => token.last}).last
       
       raise ::OAI::ResumptionTokenException.new unless records
-      if @limit && records.total < @limit
-      OAI::Provider::PartialResult.new(records)
-      else
+      
       OAI::Provider::PartialResult.new(records, token.next(token.last+@limit))  
-      end
+      
     end
 
     def next_set(token_string)
