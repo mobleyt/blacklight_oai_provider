@@ -40,7 +40,7 @@ module BlacklightOaiProvider
           return select_partial(OAI::Provider::ResumptionToken.new(options.merge({:last => 0})))
         end
       else                                                    
-        records = @controller.get_search_results(@controller.params, {:qt => 'oai', :fq => '-active_fedora_model_ssi:Page -has_model_ssim:info\:fedora\/afmodel\:collection', :phrase_filters => {:id => selector.split('/', 2).last}}).last.first
+        response, records = @controller.get_solr_response_for_doc_id selector.split('/', 2).last
       end
       records
     end
