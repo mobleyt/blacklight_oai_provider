@@ -32,7 +32,7 @@ module BlacklightOaiProvider
         if @limit && response.total >= @limit
           return select_partial(OAI::Provider::ResumptionToken.new(options.merge({:last => 0})))
         elsif @limit && response.total < @limit
-          return select__incomplete_partial(OAI::Provider::ResumptionToken.new(options.merge({:last => 0})))
+          return select_incomplete_partial(OAI::Provider::ResumptionToken.new(options.merge({:last => 0})))
         end
       else                                                    
         response, records = @controller.get_solr_response_for_doc_id selector.split('/', 2).last
