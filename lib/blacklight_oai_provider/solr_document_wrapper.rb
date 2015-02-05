@@ -29,7 +29,7 @@ module BlacklightOaiProvider
       if :all == selector
         response, records = @controller.get_search_results(@controller.params, {:qt => 'oai', :fq => '-active_fedora_model_ssi:Page -has_model_ssim:info\:fedora\/afmodel\:collection', :sort => @timestamp_field + ' asc', :rows => @limit})
 
-        if @limit && response.total >= @limit
+        if @limit && response.total > @limit
           return select_partial(OAI::Provider::ResumptionToken.new(options.merge({:last => 0})))
         end
       else                                                    
