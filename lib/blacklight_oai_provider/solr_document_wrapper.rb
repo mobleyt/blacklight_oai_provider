@@ -43,7 +43,8 @@ module BlacklightOaiProvider
       
       raise ::OAI::ResumptionTokenException.new unless records
       if @limit && records.count < @limit
-      OAI::Provider::PartialResult.new(records, token.next(token.last+@limit))
+        end_token = token.next(token.last+@limit)
+        OAI::Provider::PartialResult.new(records, token=nil, end_token)
       else
         OAI::Provider::PartialResult.new(records, token.next(token.last+@limit))
       end
