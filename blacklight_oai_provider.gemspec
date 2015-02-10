@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 4.0"
   s.add_dependency "blacklight", "~> 5.4"
-  s.add_dependency "oai", :git=> 'https://github.com/mobleyt/ruby-oai.git'
+  s.add_dependency "oai"
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'capybara'
