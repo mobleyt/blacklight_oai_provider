@@ -23,14 +23,21 @@ module BlacklightOaiProvider
       @controller.search_service
     end
 
+    def search_builder
+      # Exclude add_facets_for_advanced_search_form because it requires controller context
+      # (action_name) that is not available when SearchService is used as the scope.
+      # This processor is only relevant for the advanced search form UI, not for OAI harvesting.
+      search_service.search_builder.except(:add_facets_for_advanced_search_form)
+    end
+
     def earliest
-      builder = search_service.search_builder.merge(fl: solr_timestamp, sort: "#{solr_timestamp} asc", rows: 1)
+      builder = search_builder.merge(fl: solr_timestamp, sort: "#{solr_timestamp} asc", rows: 1)
       response = search_service.repository.search(builder)
       timestamp_presence(response.documents.first)
     end
 
     def latest
-      builder = search_service.search_builder.merge(fl: solr_timestamp, sort: "#{solr_timestamp} desc", rows: 1)
+      builder = search_builder.merge(fl: solr_timestamp, sort: "#{solr_timestamp} desc", rows: 1)
       response = search_service.repository.search(builder)
       timestamp_presence(response.documents.first)
     end
@@ -47,7 +54,7 @@ module BlacklightOaiProvider
         response.documents
       else
         # search_service.fetch(selector).first.documents.first
-        query = search_service.search_builder.where(id: selector).query
+        query = search_builder.where(id: selector).query
         search_service.repository.search(query).documents.first
       end
     end
@@ -68,7 +75,7 @@ module BlacklightOaiProvider
     end
 
     def conditions(constraints) # conditions/query derived from options
-      query = search_service.search_builder.merge(sort: "#{solr_timestamp} asc", rows: limit).query
+      query = search_builder.merge(sort: "#{solr_timestamp} asc", rows: limit).query
 
       if constraints[:from].present? || constraints[:until].present?
         from_val = solr_date(constraints[:from])

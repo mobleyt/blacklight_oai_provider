@@ -43,6 +43,7 @@ RSpec.describe BlacklightOaiProvider::SolrDocumentWrapper do
     before do
       allow(controller).to receive(:search_service).and_return(search_service)
       allow(search_service).to receive_messages(repository: repository, search_builder: search_builder)
+      allow(search_builder).to receive(:except).with(:add_facets_for_advanced_search_form).and_return(search_builder)
       allow(repository).to receive(:search).with(search_builder).and_return(response)
     end
   end

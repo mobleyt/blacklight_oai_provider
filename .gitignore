@@ -16,3 +16,7 @@
 .rspec_status
 
 .internal_test_app
+
+
+#Ignore insiders AI rules
+.github/instructions/codacy.instructions.md

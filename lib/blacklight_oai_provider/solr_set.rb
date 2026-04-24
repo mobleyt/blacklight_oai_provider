@@ -5,6 +5,13 @@ module BlacklightOaiProvider
         @controller.search_service
       end
 
+      def search_builder
+        # Exclude add_facets_for_advanced_search_form because it requires controller context
+        # (action_name) that is not available when SearchService is used as the scope.
+        # This processor is only relevant for the advanced search form UI, not for OAI harvesting.
+        search_service.search_builder.except(:add_facets_for_advanced_search_form)
+      end
+
       # Return an array of all sets, or nil if sets are not supported
       def all
         return if @fields.nil?
@@ -12,7 +19,7 @@ module BlacklightOaiProvider
         params = { rows: 0, facet: true, 'facet.field' => solr_fields }
         solr_fields.each { |field| params["f.#{field}.facet.limit"] = -1 } # override any potential blacklight limits
 
-        builder = search_service.search_builder.merge(params)
+        builder = search_builder.merge(params)
         response = search_service.repository.search(builder)
 
         sets_from_facets(response.facet_fields) if response.facet_fields
